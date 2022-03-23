@@ -14,4 +14,6 @@
 
 ### Source adapted for STM32 Weact Board.
  - F411CE 8Mflash: https://www.aliexpress.com/item/1005001456186625.html
+ - ![image](https://user-images.githubusercontent.com/34532/159671869-924d509d-0e1e-4618-a130-39d07fd7f596.png)
+
  - UART - RS485: https://www.aliexpress.com/item/32705625990.html?spm=a2g0o.order_list.0.0.21ef1802dzW8JI
