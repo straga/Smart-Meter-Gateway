@@ -1,4 +1,5 @@
-## Gateway: for Solax Smart Meter and Solax X1 mini Inverter 
+## Just for Test.
+### Gateway: for Solax Smart Meter and Solax X1 mini Inverter 
 
 ### Solax:
  - X1-2.0-S-D(L), Gen2
