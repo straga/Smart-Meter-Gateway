@@ -1,57 +1,5 @@
-#!/usr/bin/env python
-#
-# Copyright (c) 2019, Pycom Limited.
-#
-# This software is licensed under the GNU GPL version 3 or any
-# later version, with permitted additional terms. For more information
-# see the Pycom Licence v1.0 document supplied with this file, or
-# available at https://www.pycom.io/opensource/licensing
-#
 
-# function codes
-READ_COILS = 0x01                   # COILS, [0, 1]
-READ_DISCRETE_INPUTS = 0x02         # ISTS,  [0, 1]
-READ_HOLDING_REGISTERS = 0x03       # HREGS, [0, 65535]
-READ_INPUT_REGISTER = 0x04          # IREGS, [0, 65535]
-
-WRITE_SINGLE_COIL = 0x05            # COILS, [0, 1]
-WRITE_SINGLE_REGISTER = 0x06        # HREGS, [0, 65535]
-WRITE_MULTIPLE_COILS = 0x0F         # COILS, [0, 1]
-WRITE_MULTIPLE_REGISTERS = 0x10     # HREGS, [0, 65535]
-
-MASK_WRITE_REGISTER = 0x16
-READ_WRITE_MULTIPLE_REGISTERS = 0x17
-
-READ_FIFO_QUEUE = 0x18
-
-READ_FILE_RECORD = 0x14
-WRITE_FILE_RECORD = 0x15
-
-READ_EXCEPTION_STATUS = 0x07
-DIAGNOSTICS = 0x08
-GET_COM_EVENT_COUNTER = 0x0B
-GET_COM_EVENT_LOG = 0x0C
-REPORT_SERVER_ID = 0x11
-READ_DEVICE_IDENTIFICATION = 0x2B
-
-# exception codes
-ILLEGAL_FUNCTION = 0x01
-ILLEGAL_DATA_ADDRESS = 0x02
-ILLEGAL_DATA_VALUE = 0x03
-SERVER_DEVICE_FAILURE = 0x04
-ACKNOWLEDGE = 0x05
-SERVER_DEVICE_BUSY = 0x06
-MEMORY_PARITY_ERROR = 0x08
-GATEWAY_PATH_UNAVAILABLE = 0x0A
-DEVICE_FAILED_TO_RESPOND = 0x0B
-
-# PDU constants
-CRC_LENGTH = 0x02
-ERROR_BIAS = 0x80
-RESPONSE_HDR_LENGTH = 0x02
-ERROR_RESP_LEN = 0x05
-FIXED_RESP_LEN = 0x08
-MBAP_HDR_LENGTH = 0x07
+import struct
 
 CRC16_TABLE = (
     0x0000, 0xC0C1, 0xC181, 0x0140, 0xC301, 0x03C0, 0x0280, 0xC241, 0xC601,
@@ -85,17 +33,24 @@ CRC16_TABLE = (
     0x4100, 0x81C1, 0x8081, 0x4040
 )
 
-""" Code to generate the CRC-16 lookup table:
-def generate_crc16_table():
-    crc_table = []
-    for byte in range(256):
-        crc = 0x0000
-        for _ in range(8):
-            if (byte ^ crc) & 0x0001:
-                crc = (crc >> 1) ^ 0xa001
-            else:
-                crc >>= 1
-            byte >>= 1
-        crc_table.append(crc)
-    return crc_table
-"""
+CRC_LENGTH = 0x02
+
+
+def check_crc16(data):
+    req_crc = data[-CRC_LENGTH:]
+    req_data = data[:-CRC_LENGTH]
+    crc = calc_crc16(req_data)
+    if (req_crc[0] != crc[0]) or (req_crc[1] != crc[1]):
+        return None, None
+    return crc, req_data
+
+
+def calc_crc16(data):
+    crc = 0xFFFF
+    for char in data:
+        crc = (crc >> 8) ^ CRC16_TABLE[(crc ^ char) & 0xFF]
+    crc = struct.pack('<H', crc)
+    return crc
+
+
+
