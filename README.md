@@ -32,4 +32,5 @@ First, that was to replace Solax Smart Meter(original meter impossible to buy) a
 
 - solo: esp32 or stm32 - need to change UART and config.py.
 - espnow:  use two board esp32. One as Server, second as Client.
-for wireless data exchange Inverter and Meter.
+  for wireless data exchange Inverter and Meter.
+  - https://micropython-glenn20.readthedocs.io/en/latest/library/espnow.html
