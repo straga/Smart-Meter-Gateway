@@ -121,7 +121,7 @@ class Runner:
                         # parse response data
                         if self.parse_response(request, data):
                             request.alive = 10
-                            request.raw = data # response full.
+                            request.raw = data  # response full.
             await asyncio.sleep(0.1)
 
 
@@ -232,7 +232,6 @@ class Runner:
             log.debug(f"   act bytes: {hexh(value)}")
 
         if "unpack" in act:
-
             value = struct.unpack(act["unpack"], value)[0]
             # DEBUG
             log.debug(f"   act value: {value}")
