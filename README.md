@@ -1,6 +1,14 @@
-## Gateway: 
 
-First, that was to replace Solax Smart Meter(original meter impossible to buy) and Solax X1 mini Inverter.
+
+SOLO                                                               
+┌─────────┐            ┌─────────┐            ┌─────────┐              ┌─────────┐            ┌──────────┐
+│  Meter  │<--- A+ --->│         │<--- TX --->│         │<----- TX --->|         |            |          |
+│         │<--- B- --->│  RS485  │<--- RX --->│  ESP32  │<----- RX --->|  RS485  |<--- A+ --->| Inverter |
+│         │<--- GND -->│         │<--- GND -->|         |<----- GND -->|         |<--- B- --->|          |
+│         │            │         │<--- 3.3V-->|         |<----- 3.3V-->|         |<--- GND -->|          |
+└─────────┘            └─────────┘            └─────────┘              └─────────┘            └──────────┘
+
+
 
 ### Inverter:
 
