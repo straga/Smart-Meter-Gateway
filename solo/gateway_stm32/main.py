@@ -2,7 +2,6 @@
 import uasyncio as asyncio
 import uos
 
-import _thread
 import machine
 from scrivo import logging
 
@@ -50,12 +49,12 @@ def main():
 
     # AsyncIO in thread
     loop = asyncio.get_event_loop()
-    _ = _thread.stack_size(8 * 1024)
-    _thread.start_new_thread(loop.run_forever, ())
 
     # Run Loader Task
     loop.create_task(run_wdt())
     loop.create_task(loader())
+
+    loop.run_forever()
 
 
 if __name__ == '__main__':

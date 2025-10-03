@@ -1,6 +1,12 @@
+# STM32 Blackpill F411 Configuration
+# UART configuration (pins are fixed by UART number on STM32)
+
+METER_UART_ID = 1   # UART1 (PA9/PA10) → Eastron meter
+PANEL_UART_ID = 2   # UART2 (PA2/PA3)  → Solax panel
+
 
 data_request = {
-    "watt_eastron": {
+    "watt_eastron_1p": {
         "addr": 1,
         "func": 4,
         "start_reg": 12,
@@ -9,7 +15,7 @@ data_request = {
         "raw": 0x00,
     },
 
-    "deye_chint_1p": {
+    "watt_chint_1p": {
         "addr": 1,
         "func": 3,
         "start_reg": 8192,
@@ -66,6 +72,20 @@ data_register_slave = {
         "master": 48193,
         "func": 0x03,
         "act": None
+    },
+
+    # Solax Bost: func 04, reg 12 = offset 30013: Active Power (direct read)
+    30013: {
+        "master": 30013,
+        "func": 0x04,
+        "act": None  # Send raw data (float32) as-is
+    },
+
+    # Solax Boost: func 03, reg 21 = offset 40022: Holding Register 21 (unknown, send 0)
+    40022: {
+        "master": -1,
+        "func": 0x03,
+        "act": {"pack": ">I", "scale": 1, "value": 0}  # 4 bytes (2 registers) = 0
     },
 }
 
